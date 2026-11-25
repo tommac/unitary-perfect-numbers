@@ -8,6 +8,7 @@ authors:
   - family-names: "Maciejewski"
     given-names: "Tom"
     orcid: "https://orcid.org/0009-0004-5702-5302"
+doi: "10.5281/zenodo.24543262"
 keywords:
   - "unitary perfect numbers"
   - "Subbarao-Warren conjecture"
@@ -23,4 +24,4 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0004-5702-5302"
   year: 2026
   notes: "Preprint"
-  url: "https://github.com/tommac/unitary-perfect-numbers"
+  doi: "10.5281/zenodo.24543262"

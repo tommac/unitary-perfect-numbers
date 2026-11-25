@@ -1,6 +1,6 @@
 # Unitary perfect numbers with a small power of two, and a conditional bounded-box reduction
 
-**Tom Maciejewski** · Preprint, 2026 · [Read the paper (PDF)](paper.pdf)
+**Tom Maciejewski** · Preprint, 2026 · [Read the paper (PDF)](paper.pdf) · [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24543262.svg)](https://doi.org/10.5281/zenodo.24543262)
 
 ## Abstract
 
@@ -27,7 +27,7 @@ A unitary perfect number is a positive integer $n$ with $\sigma^*(n)=2n$, where 
   title  = {Unitary perfect numbers with a small power of two, and a conditional bounded-box reduction},
   year   = {2026},
   note   = {Preprint},
-  url    = {https://github.com/tommac/unitary-perfect-numbers},
+  doi    = {10.5281/zenodo.24543262},
 }
 ```
 
