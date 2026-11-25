@@ -1,0 +1,3 @@
+# a=117 with the components 3^4 and 41 forced; Python program (search2.py), run 2026-11-25
+# the seed 2^117+1 has the 22-digit prime factor 5302306226370307681801, proved prime with PARI/GP isprime
+a=117: solutions=[] OPEN=0 nodes=690726 time=21.6s

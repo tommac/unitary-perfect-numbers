@@ -1,0 +1,2 @@
+# a=16 seed 2^a+1 = 65537:1
+DONE a=16 worker=0/1 nodes=713484870 solutions=0 open=0 scanned_big=7572864370 hmax=30000000000 seconds=10617.9

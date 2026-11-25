@@ -1,0 +1,2 @@
+# a=14 seed 2^a+1 = 5:1,29:1,113:1
+DONE a=14 worker=0/1 nodes=5897 solutions=0 open=0 scanned_big=0 hmax=20000000000 seconds=0.0

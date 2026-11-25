@@ -1,0 +1,135 @@
+Need to factor 2^m+1 for 2664 m values (max m = 9999) ...
+  loaded 11053 cached factorizations from disk
+  local pass done: cached 11053, 177 skipped or timed out
+  cached 11053 factorizations, found 7951 m with non-Higgs factor < 10^8 in 2^m+1
+  still skipped (timed out): [4347, 4905, 5769, 6126, 6165, 7749, 8001, 8019, 8034, 8037, 8055, 8058, 8073, 8082, 8091, 8106, 8109, 8110, 8127, 8145, 8150, 8163, 8166, 8181, 8199, 8217, 8230, 8235, 8253, 8262, 8271, 8289, 8307, 8325, 8330, 8343, 8361, 8379, 8397, 8398, 8415, 8433, 8451, 8454, 8466, 8469, 8487, 8505, 8523, 8541, 8559, 8574, 8577, 8586, 8595, 8613, 8622, 8631, 8649, 8667, 8670, 8682, 8685, 8703, 8721, 8730, 8739, 8750, 8754, 8757, 8762, 8766, 8775, 8793, 8802, 8810, 8811, 8814, 8829, 8847, 8865, 8870, 8874, 8883, 8901, 8910, 8919, 8934, 8937, 8955, 8973, 8991, 9009, 9010, 9027, 9042, 9045, 9063, 9078, 9081, 9099, 9117, 9135, 9153, 9171, 9178, 9186, 9189, 9190, 9207, 9210, 9225, 9234, 9243, 9258, 9261, 9270, 9279, 9282, 9290, 9297, 9315, 9318, 9333, 9350, 9351, 9369, 9387, 9405, 9423, 9441, 9459, 9477, 9486, 9495, 9498, 9513, 9530, 9531, 9534, 9549, 9558, 9567, 9585, 9590, 9603, 9606, 9621, 9639, 9650, 9657, 9675, 9690, 9693, 9710, 9711, 9726, 9729, 9747, 9765, 9770, 9783, 9801, 9819, 9822, 9837, 9855, 9873, 9882, 9891, 9894, 9909, 9927, 9945, 9963, 9981, 9999]
+=== 3^2 5^3 (forced=3^2 * 5^3, a==10 mod 20) ===
+total candidates: 500
+  seed-non-higgs: 396
+  seed-zsigmondy: 102
+  v2-overshoot: 2
+  seed-non-higgs_examples:
+    a=50 {'m': 50, 'bad': 8101}
+    a=70 {'m': 14, 'bad': 113}
+    a=90 {'m': 90, 'bad': 54001}
+    a=110 {'m': 22, 'bad': 2113}
+    a=130 {'m': 130, 'bad': 108140989558681}
+    a=150 {'m': 50, 'bad': 8101}
+    a=190 {'m': 38, 'bad': 525313}
+    a=210 {'m': 14, 'bad': 113}
+  seed-zsigmondy_examples:
+    a=170 {}
+    a=510 {}
+    a=810 {}
+    a=850 {}
+    a=970 {}
+    a=1030 {}
+    a=1130 {}
+    a=1190 {}
+  v2-overshoot_examples:
+    a=10 {'step': 4, 'v2': 13, 'bases': 8}
+    a=30 {'step': 6, 'v2': 32, 'bases': 17}
+=== 3^4 41 (forced=3^4 * 41, a==9 mod 18) ===
+total candidates: 556
+  seed-non-higgs: 392
+  seed-zsigmondy: 160
+  v2-overshoot: 4
+  seed-non-higgs_examples:
+    a=27 {'m': 27, 'bad': 87211}
+    a=99 {'m': 99, 'bad': 5347}
+    a=135 {'m': 27, 'bad': 87211}
+    a=171 {'m': 57, 'bad': 160465489}
+    a=189 {'m': 27, 'bad': 87211}
+    a=207 {'m': 69, 'bad': 168749965921}
+    a=225 {'m': 25, 'bad': 4051}
+    a=261 {'m': 29, 'bad': 3033169}
+  seed-zsigmondy_examples:
+    a=81 {}
+    a=153 {}
+    a=243 {}
+    a=405 {}
+    a=459 {}
+    a=567 {}
+    a=729 {}
+    a=765 {}
+  v2-overshoot_examples:
+    a=9 {'step': 4, 'v2': 15, 'bases': 7}
+    a=45 {'step': 6, 'v2': 50, 'bases': 28}
+    a=63 {'step': 7, 'v2': 75, 'bases': 42}
+    a=117 {'step': 8, 'v2': 128, 'bases': 70}
+=== 5^2 13^2 (forced=5^2 * 13^2, a==6 mod 12) ===
+total candidates: 833
+  seed-non-higgs: 628
+  seed-zsigmondy: 202
+  v2-overshoot: 3
+  seed-non-higgs_examples:
+    a=42 {'m': 14, 'bad': 113}
+    a=54 {'m': 54, 'bad': 246241}
+    a=66 {'m': 22, 'bad': 2113}
+    a=78 {'m': 78, 'bad': 1249}
+    a=90 {'m': 90, 'bad': 54001}
+    a=114 {'m': 38, 'bad': 525313}
+    a=126 {'m': 14, 'bad': 113}
+    a=138 {'m': 138, 'bad': 5415624023749}
+  seed-zsigmondy_examples:
+    a=102 {}
+    a=162 {}
+    a=306 {}
+    a=486 {}
+    a=510 {}
+    a=582 {}
+    a=618 {}
+    a=678 {}
+  v2-overshoot_examples:
+    a=6 {'step': 5, 'v2': 8, 'bases': 6}
+    a=18 {'step': 4, 'v2': 22, 'bases': 13}
+    a=30 {'step': 8, 'v2': 37, 'bases': 24}
+=== 5^4 157^2 313 (forced=5^4 * 157^2 * 313, a==130 mod 260) ===
+total candidates: 38
+  seed-non-higgs: 36
+  seed-zsigmondy: 2
+  seed-non-higgs_examples:
+    a=130 {'m': 130, 'bad': 108140989558681}
+    a=390 {'m': 78, 'bad': 1249}
+    a=650 {'m': 50, 'bad': 8101}
+    a=910 {'m': 14, 'bad': 113}
+    a=1170 {'m': 78, 'bad': 1249}
+    a=1430 {'m': 22, 'bad': 2113}
+    a=1690 {'m': 130, 'bad': 108140989558681}
+    a=1950 {'m': 50, 'bad': 8101}
+  seed-zsigmondy_examples:
+    a=2210 {}
+    a=6630 {}
+=== 5^4 29 157^2 313 (forced=5^4 * 29 * 157^2 * 313, a==26 mod 52) ===
+total candidates: 192
+  seed-non-higgs: 162
+  seed-zsigmondy: 29
+  v2-overshoot: 1
+  seed-non-higgs_examples:
+    a=78 {'m': 78, 'bad': 1249}
+    a=130 {'m': 130, 'bad': 108140989558681}
+    a=182 {'m': 14, 'bad': 113}
+    a=234 {'m': 78, 'bad': 1249}
+    a=286 {'m': 22, 'bad': 2113}
+    a=338 {'m': 338, 'bad': 180201997}
+    a=390 {'m': 78, 'bad': 1249}
+    a=494 {'m': 38, 'bad': 525313}
+  seed-zsigmondy_examples:
+    a=442 {}
+    a=1326 {}
+    a=2106 {}
+    a=2210 {}
+    a=2522 {}
+    a=2678 {}
+    a=2938 {}
+    a=3094 {}
+  v2-overshoot_examples:
+    a=26 {'step': 5, 'v2': 32, 'bases': 21}
+
+=== Aggregate summary ===
+total candidates across all impostors: 2119
+  seed-non-higgs: 1614
+  seed-zsigmondy: 495
+  v2-overshoot: 10
+
+Kernels with unresolved cases:

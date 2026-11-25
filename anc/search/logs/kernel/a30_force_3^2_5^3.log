@@ -1,0 +1,2 @@
+# a=30 seed 2^a+1 = 5:2,13:1,41:1,61:1,1321:1
+DONE a=30 worker=0/1 nodes=22 solutions=0 open=0 scanned_big=0 hmax=20000000000 seconds=0.0

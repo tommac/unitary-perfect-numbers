@@ -1,0 +1,4 @@
+# Post-retry: all 45 originally no-factor m's in (40000, 50000] now have factor data.
+# Filter N closed those with non-3-Higgs witnesses; remainder are in the
+# partial-cofactor candidate sets of Theorems thm:Heven-45000 and thm:Heven-50000.
+# No m in (40000, 50000] is currently in the UNKNOWN_no_factor bucket.

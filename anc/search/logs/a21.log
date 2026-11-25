@@ -1,0 +1,2 @@
+# a=21 seed 2^a+1 = 3:2,43:1,5419:1
+DONE a=21 worker=0/1 nodes=7016 solutions=0 open=0 scanned_big=0 hmax=20000000000 seconds=0.0

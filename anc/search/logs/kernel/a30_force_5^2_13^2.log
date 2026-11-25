@@ -1,0 +1,2 @@
+# a=30 seed 2^a+1 = 5:2,13:1,41:1,61:1,1321:1
+DONE a=30 forced=5:2,13:2 nodes=0 solutions=0 open=0 note=forced-components-inconsistent

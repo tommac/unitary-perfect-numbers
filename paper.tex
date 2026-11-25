@@ -1,0 +1,1410 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage[hypertexnames=false]{hyperref}
+\hypersetup{hidelinks}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{conjecture-fwd}{Conjecture (strict form)}
+\newtheorem*{hypothesis}{Hypothesis H3}
+
+\theoremstyle{definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\newcommand{\RESULTabstract}{the only unitary perfect numbers with $a\le 17$ or $a\in\{19, 21, 23, 25\}$ are $6$, $60$, $90$ and $87360$; so a sixth unitary perfect number has $a\ge 18$ and $a\notin\{19, 21, 23, 25\}$.}
+\newcommand{\RESULTtheorem}{Let $n=2^am$ be a unitary perfect number with $m$ odd.  If $a\le 17$ or $a\in\{19, 21, 23, 25\}$, then $n$ is one of $6$, $60$, $90$ and $87360$.  Consequently a sixth unitary perfect number has $a\ge 18$ and $a\notin\{19, 21, 23, 25\}$.}
+\newcommand{\RESULTopen}{For example, at $a=22$ and $a=29$ the search reaches branches in which the next component would have to be sought among all primes up to about $10^{13}$.}
+\newcommand{\Aall}{17}
+\newcommand{\Apy}{21}
+\newcommand{\RESULTwallproof}{}
+\newcommand{\RESULTwallabstract}{The search recovers the four known unitary perfect numbers with $a\le 6$, and with the component $5^4$ fixed it finds Wall's $24$-digit example at $a=18$.}
+\newcommand{\RESULTwallcheck}{The search recovers the four known unitary perfect numbers with $a\le6$.  Run at $a=18$ with the component $5^4$ placed first, it finds Wall's $11$-component example in $488$ nodes.}
+
+\title[Unitary perfect numbers with a small power of two]{Unitary perfect numbers with a small power of two, and a conditional bounded-box reduction}
+\author[T. Maciejewski]{Tom Maciejewski}
+\address{Independent researcher, New Jersey, USA}
+\email{tommaciejewski4@gmail.com}
+\thanks{ORCID: 0009-0004-5702-5302.}
+\date{November 2026}
+
+\subjclass[2020]{Primary 11A25; Secondary 11Y05, 11N69, 11Y50, 11A41}
+\keywords{Unitary perfect numbers; Subbarao--Warren conjecture;
+exhaustive search; 3-Higgs primes; cyclotomic primitive divisors;
+Cunningham numbers}
+
+\begin{document}
+
+\begin{abstract}
+A unitary perfect number is a positive integer $n$ with $\sigma^*(n)=2n$,
+where $\sigma^*(n)$ is the sum of the divisors $d$ of $n$ with
+$\gcd(d,n/d)=1$.  Only five are known, and it has been conjectured that there
+are only finitely many.  Every unitary perfect number has the form $n=2^am$ with $m$ odd
+and $a\ge1$.  We prove that \RESULTabstract{}  The previously published bound
+was $a\ge 11$.
+
+The proof is an exhaustive search over the odd prime-power components of
+$m$, taken in increasing order, which uses nothing but the balance
+$(2^a+1)\prod(p^e+1)=2^{a+1}\prod p^e$: every odd prime must occur to the same
+power on both sides, and the power of $2$ allows at most $a+1$ components.
+\RESULTwallabstract{}
+
+This version corrects the earlier ones.  Version~1 asserted, and
+Proposition~1 of version~2 claimed to prove, that every prime divisor of a
+unitary perfect number is a 3-Higgs prime.  That proof is invalid and the
+statement is open, so the bounded-box elimination of ``impostor'' kernels for
+$a\le 10000$ claimed there holds only under it.  We state the hypothesis
+explicitly, repair a second gap (a 2-adic budget step assumed that
+$v_2(p^e+1)$ cannot decrease as $e$ grows), settle unconditionally every case
+in which that step had been used, and withdraw several conjectures and claims
+of version~2 about the numbers $2^m+1$ that were false or unsupported.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+For a positive integer $n$ write $\sigma^*(n)=\sum_{d\,\Vert\,n}d$, where
+$d\,\Vert\,n$ means $d\mid n$ and $\gcd(d,n/d)=1$.  A \emph{unitary perfect
+number} is an $n$ with $\sigma^*(n)=2n$.  The known ones are
+\[
+6,\quad 60,\quad 90,\quad 87360,\quad 146361946186458562560000 .
+\]
+Subbarao and Warren~\cite{SW1966} introduced them and found the first four;
+Wall~\cite{Wall1975} found the fifth.
+
+\begin{conjecture-fwd}
+The five integers above are the only unitary perfect numbers.
+\end{conjecture-fwd}
+
+Every unitary perfect number is even~\cite{SW1966}; write $n=2^am$ with
+$m$ odd.  What is known about a sixth one:
+\begin{itemize}[leftmargin=*]
+\item $a\ge 11$ (Subbarao~\cite{Subbarao1970}; see also~\cite{SCNW1972} and
+\cite{Wall1987,Wall1988});
+\item $m$ has at least nine distinct prime factors (Wall~\cite{Wall1988});
+\item some prime power $p^e\,\Vert\,m$ exceeds $2^{15}$ (Wall~\cite{Wall1987});
+\item $m$ is not squarefree (Graham~\cite{Graham1989}).
+\end{itemize}
+
+\subsection*{Main result}
+Our main theorem extends the first item.
+
+\begin{theorem}\label{thm:intro}
+\RESULTtheorem{}
+\end{theorem}
+
+Theorem~\ref{thm:intro} is proved in Section~\ref{sec:search} by an exhaustive
+search, one value of $a$ at a time, that uses only the balance
+\begin{equation}\label{eq:ast}
+(2^a+1)\prod_{p^e\,\Vert\, m}(p^e+1)=2^{a+1}\prod_{p^e\,\Vert\, m}p^e .
+\end{equation}
+It keeps exact track of how often each odd prime has been produced on the left
+and used on the right, and of how much of the power $2^{a+1}$ has been spent.
+None of the published bounds listed above is used, and the search finds the
+known examples, so it also serves as an independent check on them.
+
+\subsection*{Correction to the earlier versions}
+Versions~1 and~2 of this paper (arXiv:2605.20475v1 and v2, titled
+\emph{Bounded-box reductions in the Subbarao--Warren problem for unitary perfect
+numbers}) stated that every prime divisor of a unitary perfect number is a
+3-Higgs prime (defined in Section~\ref{sec:higgs}), and built on that
+statement.  Version~1 gave no proof.  Proposition~1 of version~2 gave one, but
+it used the false divisibility $p-1\mid p^e+1$ (in fact
+$p^e+1\equiv 2\pmod{p-1}$), and we withdraw it.  We know no proof: the
+statement holds for the five known examples, but nothing in~\eqref{eq:ast}
+appears to force it.  We now call it \emph{Hypothesis~H3}.  Three
+consequences:
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item The elimination of the five impostor kernels for $1\le a\le10000$
+(Theorem~3 and Corollary~4 of version~2) holds under Hypothesis~H3 and is
+restated as Theorem~\ref{thm:conditional}.  The classification of source
+kernels that produced those five kernels was not specified precisely enough to
+be reproduced, and we no longer rely on it.
+\item The 2-adic overshoot filter of version~2 was invalid even under H3: its
+monotonicity lemma assumed that raising an exponent $e$ cannot lower
+$v_2(p^e+1)$, but $v_2(p^e+1)=1$ whenever $e$ is even.  That filter was used for
+ten candidates.  All ten are now settled unconditionally
+(Proposition~\ref{prop:ten}).
+\item Section~\ref{sec:Heven} keeps version~2's unconditional results on
+$H_{\mathrm{even}}$, which are statements about the numbers $2^m+1$, and drops
+its conjectural programme, which contained false statements
+(Section~\ref{sec:changes}).  Their bearing on unitary perfect numbers goes
+through Hypothesis~H3 only.
+\end{enumerate}
+A list of changes is in Section~\ref{sec:changes}.
+
+\section{Setup}\label{sec:setup}
+
+Let $n=2^am$ be unitary perfect, with $m$ odd and $a\ge1$.  An \emph{odd
+component} of $n$ is a prime power $p^e\,\Vert\, m$.  Since $\sigma^*$ is
+multiplicative with $\sigma^*(p^e)=p^e+1$, the equation $\sigma^*(n)=2n$ is the
+balance~\eqref{eq:ast}.  Comparing valuations on its two sides gives, for every
+odd prime $q$,
+\begin{equation}\label{eq:exponent}
+v_q(m)=v_q(2^a+1)+\sum_{p^e\,\Vert\, m}v_q(p^e+1),
+\end{equation}
+and, for the prime $2$,
+\begin{equation}\label{eq:budget}
+a+1=\sum_{p^e\,\Vert\, m}v_2(p^e+1).
+\end{equation}
+Each term of~\eqref{eq:budget} is at least $1$, so $m$ has at most $a+1$ odd
+components.  We call $2^a+1$ the \emph{seed}: by~\eqref{eq:exponent} each of its
+prime factors divides $m$.  (Versions~1 and~2 wrote~\eqref{eq:exponent} with
+$v_q(p+1)$ in place of $v_q(p^e+1)$ and without the seed term.)
+
+\section{An exact search over the power of two}\label{sec:search}
+
+Throughout this section $n=2^a m$ is a unitary perfect number with $m$ odd and
+$a\ge 1$ (every unitary perfect number is even~\cite{SW1966}).  Write
+$m=c_1c_2\cdots c_k$, where the \emph{components} $c_i=p_i^{e_i}$ are powers of
+distinct odd primes, ordered so that $c_1<c_2<\cdots<c_k$.  Then
+$\sigma^*(n)=(2^a+1)\prod_i(c_i+1)$, and $\sigma^*(n)=2n$ is the balance
+\begin{equation}\label{eq:balance}
+(2^a+1)\prod_{i=1}^{k}(c_i+1)=2^{a+1}\prod_{i=1}^{k}c_i .
+\end{equation}
+
+\begin{lemma}\label{lem:balance}
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+\item $\prod_{i=1}^{k}\bigl(1+1/c_i\bigr)=T_a:=2^{a+1}/(2^a+1)$.
+\item For every odd prime $q$,
+$v_q(2^a+1)+\sum_{i=1}^{k}v_q(c_i+1)=v_q(m)$; in particular the left side
+is $e_i$ if $q=p_i$ and $0$ if $q\nmid m$.
+\item $\sum_{i=1}^{k}v_2(c_i+1)=a+1$. Since $v_2(c+1)\ge 1$ for odd $c$,
+$k\le a+1$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Divide \eqref{eq:balance} by $(2^a+1)\prod c_i$ for (i), and compare
+$q$-adic and $2$-adic valuations of its two sides for (ii) and (iii), using that
+$2^a+1$ is odd.
+\end{proof}
+
+Part (ii) corrects the exponent formula of the earlier versions, which
+omitted the seed term $v_q(2^a+1)$.
+
+\subsection{Prefix invariants}
+For $0\le j\le k$ put
+\[
+F_j=\prod_{i\le j}\Bigl(1+\frac1{c_i}\Bigr),\quad
+S_j=\sum_{i\le j}v_2(c_i+1),\quad
+R_j=a+1-S_j,\quad
+N_j(q)=v_q(2^a+1)+\sum_{i\le j}v_q(c_i+1),
+\]
+let $D_j=\{p_1,\dots,p_j\}$, and let
+$Q_j=\{q\text{ odd prime}: N_j(q)>0,\ q\notin D_j\}$ be the primes that are
+\emph{demanded} but not yet placed.
+
+\begin{lemma}\label{lem:prefix}
+For every $0\le j<k$:
+\begin{enumerate}[label=(\alph*),leftmargin=*]
+\item $F_j<T_a$, and $F_j(1+1/c_{j+1})\le T_a$.
+\item $N_j(p_i)\le e_i$ for every $i\le j$.
+\item $Q_j\subseteq\{p_{j+1},\dots,p_k\}$; hence $|Q_j|\le k-j\le R_j$.
+\item If $p_{j+1}\in Q_j$ then $e_{j+1}\ge N_j(p_{j+1})$.  If
+$p_{j+1}\notin Q_j$ then $|Q_j|+1\le R_j$.
+\item If $p_{j+1}\notin Q_j$ and $|Q_j|=R_j-1$, then $v_2(c_{j+1}+1)=1$ and
+every odd prime factor of $c_{j+1}+1$ lies in $D_j\cup Q_j$.
+\item Let $m_q$ be the least power $q^e>c_j$ with $e\ge N_j(q)$, for
+$q\in Q_j$, and let $f_j=R_j-|Q_j|$. Then
+\[
+\frac{T_a}{F_j}\le\Bigl(1+\frac1{c_{j+1}}\Bigr)
+\prod_{q\in Q_j}\Bigl(1+\frac1{\max(c_{j+1}+1,\,m_q)}\Bigr)
+\Bigl(1+\frac1{c_{j+1}+1}\Bigr)^{f_j}.
+\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) $T_a/F_j=\prod_{i>j}(1+1/c_i)$ by Lemma~\ref{lem:balance}(i), and each
+factor exceeds $1$.  (b) $N_j(p_i)\le N_k(p_i)=e_i$ by
+Lemma~\ref{lem:balance}(ii).  (c) A prime with $N_j(q)>0$ divides $m$ by
+Lemma~\ref{lem:balance}(ii), and is not among $p_1,\dots,p_j$ when $q\in Q_j$.
+Each later component costs $v_2(c_i+1)\ge1$, and these costs add up to $R_j$
+by Lemma~\ref{lem:balance}(iii).  (d) The first claim is (b) at $j=k$. For the
+second, the later components then include one for each prime of $Q_j$ and one
+for $p_{j+1}$.  (e) After step $j+1$ the demanded set contains $Q_j$ and every
+odd prime factor of $c_{j+1}+1$ outside $D_j\cup Q_j$ (none of them is
+$p_{j+1}$), and by (c) its size is at most
+$R_{j+1}=R_j-v_2(c_{j+1}+1)$.  So $R_j-1+t\le R_j-v_2(c_{j+1}+1)$, where $t$ is
+the number of such primes, which forces $v_2(c_{j+1}+1)=1$ and $t=0$.
+(f) The later components are $c_{j+1}$, one power of each $q\in Q_j$ other
+than $p_{j+1}$, which exceeds both $c_{j+1}$ and $c_j$ and so is at least
+$\max(c_{j+1}+1,m_q)$, and at most $f_j$ further components, each larger than
+$c_{j+1}$.  The right side bounds their product, with one factor to spare.
+\end{proof}
+
+\subsection{The search}
+Fix $a$.  The search builds the sequence $c_1<c_2<\cdots$ one component at
+a time.  At a prefix of length $j$ it computes $F_j$, $S_j$, $N_j$ and $Q_j$
+exactly, and takes as candidates for $c_{j+1}$ the prime powers $p^e$ with
+\[
+c_j<p^e,\qquad F_j(1+p^{-e})\le T_a,\qquad
+\text{the inequality of Lemma~\ref{lem:prefix}(f) holds},
+\]
+subject to (b)--(e).  Concretely the candidates are: the powers $q^e$ with
+$q\in Q_j$ and $e\ge N_j(q)$; if $f_j=1$, the numbers $c=2M-1$ with $M$ odd and
+composed of primes in $D_j\cup Q_j$ (within the capacities left by (b)) that are
+powers of a new prime (Lemma~\ref{lem:prefix}(e)); and if $f_j\ge2$, all powers
+of new primes in the range.  A candidate is kept only if, after it is added,
+(b) and (c) still hold.  The prefix is a solution when $F_j=T_a$,
+$S_j=a+1$ and $N_j(q)$ equals the exponent of $q$ for every prime $q$.
+
+\begin{theorem}\label{thm:complete}
+For each $a$, every unitary perfect number $2^a m$ with $m$ odd is found by the
+search, provided no branch is reported as open.
+\end{theorem}
+
+\begin{proof}
+Let $2^a m$ be unitary perfect with components $c_1<\cdots<c_k$.  By
+Lemma~\ref{lem:prefix}, for each $j<k$ the component $c_{j+1}$ is among the
+candidates at the prefix $(c_1,\dots,c_j)$ and survives every test applied to
+it, and the full sequence satisfies the solution conditions by
+Lemma~\ref{lem:balance}.  The search leaves a candidate unexamined or
+undecided in only three situations, and each is reported as an open branch:
+when $f_j\ge2$ and the range for $c_{j+1}$ extends beyond the limit up to
+which new primes are scanned ($2\cdot10^{10}$, and $3\cdot10^{10}$ for
+$a=16$); when $c+1$ cannot be factored completely and the tests that need
+only part of its factorization do not exclude $c$; and, in the C program,
+when a candidate is a power of a prime above $2^{62}$.
+\end{proof}
+
+\subsection{Results}
+
+\begin{proof}[Proof of Theorem~\ref{thm:intro}]
+For each $a$ in the statement, the search of Theorem~\ref{thm:complete}
+terminates with no open branch.  It returns exactly the components of $6$ and
+$90$ for $a=1$, of $60$ for $a=2$, of $87360$ for $a=6$\RESULTwallproof{}, and
+nothing for the other values.  Table~\ref{tab:search} gives the size of each
+search.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{rrr@{\qquad}rrr@{\qquad}rrr}
+\toprule
+$a$ & nodes & sol. & $a$ & nodes & sol. & $a$ & nodes & sol.\\
+\midrule
+1 & 2 & 2 & 8 & 32 & 0 & 15 & 146 & 0\\
+2 & 3 & 1 & 9 & 12 & 0 & 16 & 713\,484\,870 & 0\\
+3 & 2 & 0 & 10 & 28 & 0 & 17 & 606 & 0\\
+4 & 5 & 0 & 11 & 54 & 0 & 19 & 1\,811 & 0\\
+5 & 7 & 0 & 12 & 557 & 0 & 21 & 7\,016 & 0\\
+6 & 12 & 1 & 13 & 121 & 0 & 23 & 8\,951\,378 & 0\\
+7 & 13 & 0 & 14 & 5\,897 & 0 & 25 & 440\,422\,296 & 0\\
+\bottomrule
+\end{tabular}
+\medskip
+\caption{The exact search for each settled $a$: number of nodes visited and number of solutions found (no branch is open in any of these runs). The solutions are $6$ and $90$ ($a=1$), $60$ ($a=2$) and $87360$ ($a=6$).}
+\label{tab:search}
+\end{table}
+
+The previously published bound is $a\ge11$, due to Subbarao, Cook, Newberry
+and Weber~\cite{SCNW1972}, as reported by Wall~\cite{Wall1987,Wall1988}.  Wall's
+results that a sixth unitary perfect number has at least nine odd
+components~\cite{Wall1988} and an odd component exceeding
+$2^{15}$~\cite{Wall1987} are not used.
+
+\subsection*{Implementation and checks}
+The search was implemented twice: in Python with exact rational arithmetic,
+and as a C port using GMP.  The two programs visit exactly the same number of
+nodes on every input where both were run: all $a\le15$, $a=17,19,21$, and the
+kernel runs of Proposition~\ref{prop:ten} at $a=45$ and $63$ and with $5^4$
+placed first at $a=18$.  Factorizations of numbers up to $2\cdot10^7+2$ are read
+from a table of smallest prime factors.  New primes between $2\cdot10^7$ and
+$2\cdot10^{10}$ are found with a segmented sieve; for each, $c+1$ is divided by
+the primes already present and the cofactor tested, exactly as in
+Lemma~\ref{lem:prefix}(b),(c).  This path was checked by rebuilding the C program
+with the table limited to $10^5$: it visits the same $8{,}951{,}378$ nodes at
+$a=23$ as the standard build.  Other numbers are factored by trial division
+and Pollard's $\rho$, and a branch whose numerator cannot be factored
+completely is reported as open.  An open branch can be resumed from its node
+with a larger scan limit, since the node determines the components already
+chosen and the lower bound for the next one.  For $a=16$ the scan limit was
+set to $3\cdot10^{10}$ from the start, so that no branch is left open.  Every
+pruning decision is made in exact integer arithmetic: a floating-point estimate
+only chooses where the binary search for the end of a candidate range starts,
+and that end is then certified exactly.  In the C program every prime that is used is below $2^{62}$, where the
+Baillie--PSW test is known to be correct; otherwise a probable-prime test is used
+only to reject candidates, and a ``composite'' verdict is always correct.  The
+only larger prime in any run is the $22$-digit factor
+$5302306226370307681801$ of $2^{117}+1$ (Proposition~\ref{prop:ten}), whose
+primality was proved with PARI/GP.  \RESULTwallcheck{}
+
+\section{The 3-Higgs hypothesis and the bounded box}\label{sec:higgs}
+
+This section restates the main result of the earlier versions with its
+dependence on an unproven hypothesis made explicit, and repairs one of its
+steps.
+
+\subsection{Hypothesis H3}
+A prime $p$ is \emph{3-Higgs} (OEIS A057447~\cite{OEIS}; see also
+Burris--Yeats~\cite{BurrisYeats}) if $p-1$ divides the cube of the product of
+the smaller 3-Higgs primes; equivalently, every prime $q\mid p-1$ is 3-Higgs and
+$v_q(p-1)\le 3$.  Let $\mathcal P_3$ be the set of 3-Higgs primes.  The smallest
+odd prime not in $\mathcal P_3$ is $17$.
+
+\begin{hypothesis}
+Every prime divisor of a unitary perfect number is 3-Higgs.
+\end{hypothesis}
+
+Every prime divisor of the five known unitary perfect numbers is 3-Higgs.  We
+know of no proof of Hypothesis~H3 and no argument that makes it plausible beyond
+that evidence; it is used only in this section and in the parts of
+Section~\ref{sec:Heven} that say so.
+
+\subsection{Kernels}
+For a unitary perfect number $n$, let $G_n$ be the directed graph on the odd
+primes dividing $n$, with an edge $p\to r$ whenever $r\mid p^{v_p(n)}+1$.  A
+\emph{source kernel} is a strongly connected set $K$ of at least two such primes
+with no edge entering $K$ from outside; for $q\in K$, \eqref{eq:exponent} then
+gives $v_q(n)=v_q(2^a+1)+\sum_{p\in K}v_q(p^{v_p(n)}+1)$.  Version~2 reported
+that a search over such kernels in the box
+\[
+\mathcal B := \{ p \le 2000,\ e \le 6,\ p^e \le 10^9,\ |K| \le 6 \},
+\]
+using the filters below, leaves, besides kernels of the known examples, the
+following five \emph{impostor} kernels.  That search was not specified
+precisely enough to be reproduced, and we use the list only as a list of cases.
+\begin{center}\begin{tabular}{lll}
+\toprule
+Kernel & Forced exponents & Seed congruence \\
+\midrule
+$3^2\,5^3$ & $\{3{:}2,\,5{:}3\}$ & $a \equiv 10 \pmod{20}$ \\
+$3^4\,41$ & $\{3{:}4,\,41{:}1\}$ & $a \equiv 9 \pmod{18}$ \\
+$5^2\,13^2$ & $\{5{:}2,\,13{:}2\}$ & $a \equiv 6 \pmod{12}$ \\
+$5^4\,157^2\,313$ & $\{5{:}4,\,157{:}2,\,313{:}1\}$ & $a \equiv 130 \pmod{260}$ \\
+$5^4\,29\,157^2\,313$ & $\{5{:}4,\,29{:}1,\,157{:}2,\,313{:}1\}$ & $a \equiv 26 \pmod{52}$ \\
+\bottomrule
+\end{tabular}\end{center}
+
+\subsection{The filters}
+For an impostor kernel $K$ and an $a$ in its seed class, the \emph{candidate}
+$(K,a)$ asks for a unitary perfect number with $2^a\,\Vert\, n$ in which every
+prime power of $K$ is an odd component.
+
+\emph{Filter Z (Zsigmondy).}  For $e>1$, the number $p^e+1$ has a prime
+divisor $r$ that divides no $p^j+1$ with $j<e$ (Zsigmondy~\cite{Zsigmondy}; the
+only exception, $2^3+1$, does not arise here), and such an $r$ satisfies
+$r\equiv1\pmod{2e}$.  Under H3, $r$ is 3-Higgs,
+so every prime factor of $2e$ is 3-Higgs and occurs in $2e$ at most three times.
+Applied to the seed exponent, this excludes many $a$.
+
+\emph{Filter N (non-3-Higgs witness).}  If $m\mid a$ with $a/m$ odd, then
+$2^m+1\mid 2^a+1$, so every prime factor of $2^m+1$ divides $n$.  Under H3, a
+candidate is excluded as soon as some $2^m+1$ of this kind has a prime factor
+that is not 3-Higgs.  Factorizations come from the bundled cache and
+FactorDB~\cite{FactorDB}, and a partial factorization suffices when it exhibits
+such a prime.  For example $a=4527$ in the class of $3^4\,41$ is excluded via
+$m=1509$: the prime $20127043$ divides $2^{1509}+1$, and
+$20127043-1=2\cdot3^4\cdot13\cdot19\cdot503$ has $v_3=4>3$.
+
+\emph{Filter O (2-adic overshoot) is withdrawn.}  Version~2 closed the prime
+powers of $K$ and of the seed under the rule ``$r\mid p^e+1$ forces $r$'', raising
+exponents as incoming valuations grew, and stopped when the running sum of
+$v_2(p^e+1)$ exceeded $a+1$.  It claimed this sum was a lower bound for the
+left side of~\eqref{eq:budget}.  It is not: when the true exponent of $p$ is
+larger than the one used, $v_2(p^e+1)$ can be smaller (it equals $1$ for every
+even $e$), and $p^e+1$ need not divide the true $p^{e'}+1$, so neither the 2-adic
+sum nor the forced primes are justified.
+
+\subsection{Results}
+
+\begin{proposition}\label{prop:ten}
+No unitary perfect number refines the impostor kernel $K$ with $2^a\,\Vert\, n$
+for any of the ten candidates that version~2 closed with filter O:
+\[
+(3^2\,5^3;\ a=10,30),\quad (3^4\,41;\ a=9,45,63,117),\quad
+(5^2\,13^2;\ a=6,18,30),\quad (5^4\,29\,157^2\,313;\ a=26).
+\]
+This holds unconditionally.
+\end{proposition}
+
+\begin{proof}
+Run the search of Section~\ref{sec:search} with the prime powers of $K$
+placed as components before the search starts.  The other components are
+taken in increasing order; in Lemma~\ref{lem:prefix}, $c_j$ then denotes the
+largest of them chosen so far ($c_0=1$), and the forced components are counted
+in $F_j$, $S_j$, $N_j$ and $D_j$.  For $(5^2\,13^2;\,a=30)$
+nothing needs to be searched: $5^2\,\Vert\, 2^{30}+1$ and $13^2+1=2\cdot5\cdot17$,
+so~\eqref{eq:exponent} would give $v_5(m)\ge3$, contradicting $5^2\,\Vert\, m$.
+The other nine searches end with no solution and no open branch; they visit
+$3$, $22$, $2$, $366$, $2737$, $690726$, $3$, $54$ and $212$ nodes respectively
+(in the order listed, omitting $(5^2\,13^2;30)$).  The case $a=117$ was run
+with the Python program, because $2^{117}+1$ has the $22$-digit prime factor
+$5302306226370307681801$; this is the only prime above $2^{64}$ that the run uses,
+and its primality was proved with PARI/GP.  As a positive control, the
+same program with $5^4$ placed first at $a=18$ finds Wall's number.
+\end{proof}
+
+\begin{theorem}\label{thm:conditional}
+Assume Hypothesis~H3.  No unitary perfect number refines a kernel containing
+$13^2$ or $157^2$.  For $K\in\{3^2\,5^3,\ 3^4\,41\}$ and every $a$ in its seed
+class with $1\le a\le 10000$, no unitary perfect number with $2^a\,\Vert\, n$
+refines $K$.
+\end{theorem}
+
+\begin{proof}
+The prime $17$ is not 3-Higgs, since $17-1=2^4$, and it divides both
+$13^2+1=2\cdot5\cdot17$ and $157^2+1=2\cdot5^2\cdot17\cdot29$; by
+\eqref{eq:exponent} it would divide $n$.  This disposes of three of the five
+kernels for every $a$, which accounts for $1063$ of the $2119$ candidates with
+$a\le10000$.  For the other two kernels there are $1056$ candidates: filter Z
+excludes $262$ of them and filter N excludes $788$, both using H3, and the
+remaining six are candidates of Proposition~\ref{prop:ten}.
+\end{proof}
+
+Theorem~\ref{thm:conditional} replaces version~2's Theorem~3 and Corollary~4.
+It is conditional on H3, and filter O is replaced by
+Proposition~\ref{prop:ten}.  The candidates with
+$a$ covered by Theorem~\ref{thm:intro} are also excluded unconditionally.
+
+\section{The set \texorpdfstring{$H_{\mathrm{even}}$}{H even}}\label{sec:Heven}
+
+The results of this section are unconditional statements about the numbers
+$2^m+1$ and the set $\mathcal P_3$ of 3-Higgs primes.  They bear on unitary
+perfect numbers only through Hypothesis~H3: under H3 every prime factor of the
+seed $2^a+1$ is 3-Higgs, so $a\in H$, and the same holds for every $m\mid a$
+with $a/m$ odd.  Version~2 presented this connection as unconditional.
+
+Let $H := \{ m \ge 1 : \text{every prime factor of } 2^m + 1
+\text{ is 3-Higgs} \}$ and $H_{\mathrm{even}} := H \cap 2\mathbb{Z}$.
+
+\begin{proposition}[Structural lemma]\label{prop:Heven-structure}
+Suppose $m = 2k \in H_{\mathrm{even}}$ with $k$ odd and $k \ge 1$. Then
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item Every prime factor of $k$ is a 3-Higgs prime.
+\item For every prime $q \mid k$, $v_q(k) \le 3$.
+\item For every odd divisor $d \mid k$, $2d \in H_{\mathrm{even}}$.
+\end{enumerate}
+The first two conditions say $k$ is \emph{Higgs-bounded}: a product
+of 3-Higgs primes each with multiplicity at most $3$. The third
+condition is a multiplicative closure: writing
+$S = \{k \text{ odd} : 2k \in H_{\mathrm{even}}\}$, $S$ is closed
+under taking odd divisors.
+\end{proposition}
+
+\begin{proof}
+By Zsigmondy's theorem applied to $\{2^n+1\}_{n \ge 1}$, the number
+$2^{2k}+1$ has a primitive prime divisor $r$ for every $k \ge 1$ odd
+(the only Zsigmondy exception for the sequence $2^n+1$ is $n = 3$,
+which does not arise since $2k$ is even). The order of $2$ modulo $r$
+is exactly $4k$, so $r \equiv 1 \pmod{4k}$ and $r - 1 = 4k \cdot s$
+for some positive integer $s$.
+
+By hypothesis $r$ is 3-Higgs, so every prime $q \mid r - 1$ is
+3-Higgs and $v_q(r-1) \le 3$.
+
+\noindent (1) For each prime $q \mid k$, $q \mid 4k \mid r - 1$, so $q$ is
+3-Higgs.
+
+\noindent (2) For each odd prime $q \mid k$,
+$v_q(r-1) = v_q(4k) + v_q(s) = v_q(k) + v_q(s) \ge v_q(k)$. Combined
+with $v_q(r-1) \le 3$, we get $v_q(k) \le 3$. (The prime $2$ does not
+constrain $k$ here since $k$ is odd.)
+
+\noindent (3) If $d \mid k$ with $d$ odd and $d < k$, then
+$2d \mid 2k$ with $(2k)/(2d) = k/d$ odd. Therefore
+$2^{2d}+1 \mid 2^{2k}+1$, so every prime divisor of $2^{2d}+1$ is a
+prime divisor of $2^{2k}+1$ and hence 3-Higgs. So $2d \in H_{\mathrm{even}}$.
+\end{proof}
+
+\begin{proposition}[Fermat-prime obstruction]\label{prop:Heven-dyadic}
+$H_{\mathrm{even}} \subseteq \{ m \equiv 2 \pmod 4 \}$.
+\end{proposition}
+
+\begin{proof}
+Write $m = 2^j \cdot \ell$ with $\ell$ odd. We show that if $j \ge 2$
+then $m \notin H$, which gives the conclusion.
+
+Fix $k \ge 2$ and let $q$ be any prime divisor of the Fermat number
+$F_k = 2^{2^k} + 1$. The order of $2$ modulo $q$ divides $2^{k+1}$ and
+does not divide $2^k$ (since $q \mid F_k$ means $2^{2^k} \equiv -1
+\pmod q$), so $\mathrm{ord}_q(2) = 2^{k+1}$. Consequently
+\[
+q \equiv 1 \pmod{2^{k+1}}.
+\]
+The refinement due to Lucas strengthens this for $k \ge 2$ to
+$q \equiv 1 \pmod{2^{k+2}}$, hence
+\[
+v_2(q - 1) \ge k + 2 \ge 4 > 3 \quad (k \ge 2).
+\]
+The 3-Higgs definition forbids any prime factor of $p - 1$ to occur
+with exponent exceeding $3$, so $q$ is not 3-Higgs.
+
+Now $q \mid 2^m + 1$ iff $\mathrm{ord}_q(2) \mid 2m$ and
+$\mathrm{ord}_q(2) \nmid m$, i.e., $v_2(\mathrm{ord}_q(2)) = v_2(m) + 1$.
+With $\mathrm{ord}_q(2) = 2^{k+1}$ this is $v_2(m) = k$.
+
+Therefore: for any $m$ with $v_2(m) = j \ge 2$, take $k = j$ and any
+prime divisor $q$ of $F_j$; then $q \mid 2^m + 1$ and $q$ is not
+3-Higgs, so $m \notin H$. The remaining cases $v_2(m) \le 1$ are
+exactly $m$ odd ($v_2 = 0$) and $m \equiv 2 \pmod 4$ ($v_2 = 1$),
+giving the stated containment for the even part of $H$.
+\end{proof}
+
+\begin{conjecture}\label{conj:Heven-finite}
+$H_{\mathrm{even}}$ is finite.
+\end{conjecture}
+
+\begin{theorem}[Reduction to the prime case]\label{thm:prime-reduction}
+$H_{\mathrm{even}}$ is finite if and only if
+\[
+H_{\mathrm{even}}^{\mathrm{prime}} \;:=\;
+\{m = 2p \in H_{\mathrm{even}} : p \text{ odd prime}\}
+\]
+is finite. More precisely, if $H_{\mathrm{even}}^{\mathrm{prime}}$
+has cardinality $N$ (with corresponding primes $p_1, \dots, p_N$),
+then
+\[
+|H_{\mathrm{even}}| \;\le\; \prod_{i=1}^{N} 4 \;=\; 4^{N}.
+\]
+\end{theorem}
+
+\begin{proof}
+The forward direction is trivial. For the converse, let $m = 2k \in
+H_{\mathrm{even}}$ with $k \ge 1$ odd. By
+Proposition~\ref{prop:Heven-structure}(1)-(3), $k$ is Higgs-bounded
+and every odd divisor $d \mid k$ satisfies $2d \in H_{\mathrm{even}}$.
+In particular, for every prime $q \mid k$, $2q \in
+H_{\mathrm{even}}^{\mathrm{prime}}$, so $q \in
+\{p_1, \dots, p_N\}$. Combined with $v_q(k) \le 3$, this forces
+$k$ to be of the form $\prod_{i=1}^N p_i^{e_i}$ with each $e_i \in
+\{0,1,2,3\}$, giving at most $4^N$ possible $k$.
+\end{proof}
+
+\noindent The reduction is sharp in the sense that for every
+$k = \prod p_i^{e_i}$ with each $2p_i \in H_{\mathrm{even}}^{\mathrm{prime}}$
+and $e_i \le 3$, the candidate $m = 2k$ \emph{passes} the structural
+lemma but may still fail (some prime factor of $2^{2k}+1$ may be
+non-3-Higgs even though each prime in $k$ is 3-Higgs). So $4^N$ is a
+candidate bound, refined to the actual $H_{\mathrm{even}}$ by checking
+each candidate.
+
+\smallskip
+Theorem~\ref{thm:prime-reduction} reduces
+Conjecture~\ref{conj:Heven-finite} to the prime case:
+\emph{prove that only finitely many odd primes $p$ have all prime
+factors of $2^{2p}+1$ in $\mathcal{P}_3$}. The remaining open candidates in Theorems~\ref{thm:Heven-3000}--\ref{thm:Heven-50000}
+are controlled by the same prime-branch obstruction: the primitive
+undecided cases have the form $m=2p$, while five composite-$k$
+candidates ($m \in \{27978, 30354, 31538, 41898, 46630\}$, each with
+$k$ a product of two Higgs primes) are inherited from unresolved
+prime divisors through Proposition~\ref{prop:Heven-structure}.
+
+\begin{theorem}\label{thm:Heven-1200}
+$H_{\mathrm{even}} \cap [2, 1200] = \{ 2, 6, 10, 18, 26, 30, 46, 62, 82, 122 \}$.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:Heven-structure}, any $m = 2k \in
+H_{\mathrm{even}}$ with $k$ odd and $k \le 600$ requires $k$ to be
+Higgs-bounded. Of the $300$ odd $k$ in $[1, 600]$, exactly $246$ are
+Higgs-bounded; the other $54$ are structurally excluded from
+$H_{\mathrm{even}}$ without any factoring required.
+
+For each of the $246$ Higgs-bounded candidates, we factor $2^m + 1$
+(local Pollard~$\rho$/$p-1$ for small $m$, FactorDB~\cite{FactorDB}
+for larger $m$) and recursively verify the 3-Higgs status of every
+listed prime factor.
+Of the $246$ candidates:
+\begin{itemize}
+\item $10$ values of $m$ have every prime factor of $2^m+1$ 3-Higgs;
+these are exactly the elements listed in the theorem statement.
+\item $236$ values of $m$ each contain at least one verified
+non-3-Higgs prime factor (witness digit sizes ranging from $3$ to
+$115$).
+\item $0$ values remain undecided.
+\end{itemize}
+The script \texttt{verify\_Heven\_rigorous.py} is provided in the
+supplementary materials and records, for every $m$ in the second
+group, the specific non-3-Higgs prime witness.
+\end{proof}
+
+Theorem~\ref{thm:Heven-1200} extends the verified gap considerably:
+$H_{\mathrm{even}}$ has no element in the wide range $(122, 1200]$,
+strongly supporting Conjecture~\ref{conj:Heven-finite}.
+
+\begin{theorem}\label{thm:Heven-3000}
+$H_{\mathrm{even}} \cap (1200, 3000]$ is contained in the two-element
+candidate set $\{2426, 2602\}$. Every other even $m$ in $(1200, 3000]$
+is rigorously excluded from $H_{\mathrm{even}}$, by either the
+structural lemma (Proposition~\ref{prop:Heven-structure}), an
+explicit non-3-Higgs prime witness in the factorization of $2^m + 1$,
+or the deep-Pratt descent of Lemma~\ref{lem:closures-deep} (which
+closes $m = 2446$).
+\end{theorem}
+
+\begin{proof}
+Of the $450$ odd $k$ in $[601, 1500]$, $111$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$339$ candidates split: $336$ have a verified non-3-Higgs prime
+witness directly in $2^m + 1$ (recorded by
+\texttt{verify\_Heven\_rigorous.py}); $3$ were initially blocked by
+unfactored composite cofactors. One of these three, $m = 2446$, is
+closed by Lemma~\ref{lem:closures-deep} (a $368$-digit
+APR-CL-verified prime divisor of $2^{2446}+1$ has $4513 \mid p^{*}-1$,
+and $v_2(4512) = 5 > 3$). The remaining two $m$ values, $\{2426, 2602\}$,
+have FactorDB factorizations whose composite cofactors are not yet
+deep enough for a Pratt-tree closure.
+
+For $m = 1202$, the cache records an $87$-digit prime factor
+$P_1 \mid 2^{1202}+1$ with
+$P_1 - 1 = 4 \cdot 601 \cdot Q$, where $Q$ is a prime. Moreover
+$Q - 1 = 2^{10} \cdot 3 \cdot 337 \cdot R$ for a $78$-digit cofactor
+$R$ (the explicit small-prime decomposition is verified by trial
+division). Since $v_2(Q-1) = 10 > 3$, the prime $Q$ fails the 3-Higgs
+$v_2$ exponent bound. Consequently $P_1$ has a non-3-Higgs prime
+factor $Q$ in $P_1 - 1$ (with $v_Q(P_1-1) = 1$), so $P_1$ is itself
+not 3-Higgs. Since $P_1 \mid 2^{1202}+1$, the seed $2^{1202}+1$
+contains a non-3-Higgs prime, and $m = 1202 \notin H_{\mathrm{even}}$.
+(The cache also records a $91$-digit prime factor $P$ of $2^{1202}+1$ with
+$v_2(P-1)=6$, which is a witness by itself.)
+
+For $m = 2426$ and $m = 2602$, the FactorDB factorizations of
+$2^m + 1$ contain composite cofactors of $355$--$392$ digits
+(unfactored), so we cannot currently rule out hidden non-3-Higgs
+factors.
+
+All other Higgs-bounded candidates have at least one explicit
+non-3-Higgs prime witness recorded by
+\texttt{verify\_Heven\_rigorous.py}.
+\end{proof}
+
+\noindent The two open candidates $\{2426, 2602\}$ would
+resolve with NFS-level factoring of $2^m + 1$ for those $m$. The
+result $|H_{\mathrm{even}} \cap [2, 3000]| \le 12$ is striking
+evidence for Conjecture~\ref{conj:Heven-finite}.
+
+\begin{theorem}\label{thm:Heven-5000}
+$H_{\mathrm{even}} \cap (3000, 5000]$ is contained in the five-element
+candidate set
+\[
+\{3398, 3518, 4166, 4502, 4622\}.
+\]
+\end{theorem}
+
+\begin{proof}
+Of $500$ odd $k$ in $[1501, 2500]$, $132$ are not Higgs-bounded and
+excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$368$ candidates split: $363$ values of $m = 2k$ have a verified
+non-3-Higgs prime witness in $2^m + 1$, and $5$ values are blocked by
+unfactored composite cofactors in FactorDB's partial factorization
+(listed in the theorem). Examples of closures: $m = 4366$ is killed
+by $593 \mid 2^{4366}+1$ ($593 - 1 = 2^4 \cdot 37$, $v_2 = 4$);
+$m = 4742$ by $493169 \mid 2^{4742}+1$
+($493169 - 1 = 2^4 \cdot 30823$); $m = 4022$ by a recursive Pratt-tree
+chain: the 18-digit prime
+$920793289987614829 \mid 2^{4022}+1$ has its $(p-1)$ chain descend
+through $1230855683509 \to 2169031 \to 17$, where the final factor
+$17$ is non-3-Higgs (since $17-1 = 2^4$). All $363$ rigorous exclusions
+are recorded by the supplementary script.
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-10000}
+$H_{\mathrm{even}} \cap (5000, 10000]$ is contained in the
+five-element candidate set
+\[
+\{5114, 5774, 7846, 8966, 9326\}.
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[2501, 5000]$, $364$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$886$ Higgs-bounded candidates split as $881$ verified non-3-Higgs
+exclusions (via small-prime witnesses in $2^m + 1$ recorded by the
+supplementary script) and $5$ partial-cofactor unknowns (the five $m$
+values listed in the theorem, each blocked by an unfactored composite
+cofactor of 1500--2800 digits in $2^m+1$).
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-15000}
+$H_{\mathrm{even}} \cap (10000, 15000]$ is contained in the
+ten-element candidate set
+\[
+\{10118, 10454, 11062, 11794, 11878, 12778, 13382, 13966, 14642, 14698\}.
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[5001, 7500]$, $383$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$867$ Higgs-bounded candidates yield $m = 2k$ values for which
+FactorDB partial factorizations provide small-prime data. Of these,
+exactly $857$
+have a verified non-3-Higgs prime witness (recorded by the
+supplementary script \texttt{verify\_Heven\_rigorous.py}, or, for
+$m=10294$ and $m=10958$, given by Lemma~\ref{lem:closures-deep}), and $10$
+are partial-cofactor unknowns listed in the theorem.  In this range
+these are primitive candidates $m=2p$, with
+$p$ an odd prime in $\{5059, 5227, 5531, 5897, 5939, 6389, 6691,
+6983, 7321, 7349\}$, and each is blocked by one or more
+unfactored composite cofactors in $2^m+1$ of $1300$--$4500$ digits.
+For all ten, we have additionally queried FactorDB for the
+Aurifeuillean halves $L_p$ and $M_p$ (Equation~\ref{eq:Aurifeuillean});
+no new small prime factor in any $L_p$ or $M_p$ failed the 3-Higgs
+test, so the obstruction is genuinely NFS-blocked rather than
+shallow. (Two values $m = 10294$ and $m = 10958$, originally in this
+range as partial-cofactor unknowns, were closed via deep Pratt-tree
+descent on $1549$- and $1649$-digit APR-CL-verified prime divisors of
+$2^m + 1$; see Lemma~\ref{lem:closures-deep}.)
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-20000}
+$H_{\mathrm{even}} \cap (15000, 20000]$ is contained in the
+twenty-seven-element candidate set
+\[
+\begin{aligned}
+\{ & 15122, 15182, 15206, 15214, 15754, 15758, 16358, 16574, 16778,\\
+   & 16838, 16922, 17086, 17126, 17162, 17338, 17726, 18134,\\
+   & 18418, 18934, 18958, 19078, 19226, 19322, 19718, 19802,\\
+   & 19846, 19862 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[7501, 10000]$, $392$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$858$ Higgs-bounded candidates yield $m = 2k$ values for which
+FactorDB partial factorizations provide small-prime data. Of these,
+exactly $831$ have a verified non-3-Higgs prime witness; the
+remaining $27$ are partial-cofactor unknowns listed in the theorem.
+In this range these are primitive candidates $m=2p$ with $p$ an odd
+Higgs prime in $[7561, 9931]$, blocked by unfactored composite
+cofactors of $1700$--$6000$ digits. (Two values
+$m = 17398$ and $m = 19066$, which appeared as partial-cofactor
+unknowns in our earlier verification, were subsequently closed via
+non-3-Higgs Pratt-tree witnesses extracted from $p-1$ for large
+APR-CL-verified prime divisors $p \mid 2^m + 1$; see Lemma~\ref{lem:closures-deep}.)
+For all twenty-seven remaining, the Aurifeuillean halves $L_p, M_p$
+(Equation~\ref{eq:Aurifeuillean}) were queried in FactorDB; no
+new small prime factor failed the 3-Higgs test.
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-25000}
+$H_{\mathrm{even}} \cap (20000, 25000]$ is contained in the
+twenty-seven-element candidate set
+\[
+\begin{aligned}
+\{ & 20138, 20338, 20506, 20662, 20926, 20974, 21118, 21302,\\
+   & 21334, 21466, 21818, 21958, 22054, 22234, 22262, 22394, 22486,\\
+   & 22642, 22706, 23194, 23402, 23578, 23878, 23942, 24082, 24298,\\
+   & 24914 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[10001, 12500]$, $416$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$834$ Higgs-bounded candidates yield $m = 2k$ values with FactorDB
+partial factorizations; of these, $807$ have a verified non-3-Higgs
+prime witness in $2^m + 1$, and $27$ are partial-cofactor unknowns
+listed in the theorem.  In this range these are primitive candidates
+$m=2p$ with $p$ an odd prime in $[10069, 12457]$.
+(The value $m = 20282$ was closed via a Pratt-tree witness $v_2(p-1) = 5071$
+for a $3053$-digit APR-CL-verified prime divisor of $2^{20282}+1$; see
+Lemma~\ref{lem:closures-deep}.)
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-30000}
+$H_{\mathrm{even}} \cap (25000, 30000]$ is contained in the
+forty-eight-element candidate set
+\[
+\begin{aligned}
+\{ & 25022, 25082, 25106, 25294, 25486, 25526, 25646, 25778, 25786,\\
+   & 25822, 26066, 26098, 26198, 26302, 26342, 26438, 26482, 26534,\\
+   & 26618, 26654, 26662, 26678, 26798, 26902, 27374, 27446, 27526,\\
+   & 27662, 27806, 27926, 27978, 27998, 28058, 28102, 28174, 28214,\\
+   & 28318, 28442, 28586, 28654, 28862, 29098, 29114, 29126, 29558,\\
+   & 29642, 29662, 29914 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[12501, 15000]$, $427$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$823$ Higgs-bounded candidates yield $m = 2k$ values; of these,
+$775$ have a verified non-3-Higgs prime witness in $2^m + 1$,
+and $48$ are partial-cofactor unknowns listed in the theorem; the primitive cases in this list are of the form $m=2p$.
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-35000}
+$H_{\mathrm{even}} \cap (30000, 35000]$ is contained in the
+thirty-two-element candidate set
+\[
+\begin{aligned}
+\{ & 30354, 30386, 30542, 30878, 30994, 31162, 31258, 31454,\\
+   & 31466, 31538, 31634, 31802, 31918, 31942, 31982, 32126, 32174,\\
+   & 32534, 32762, 32902, 33134, 33214, 33382, 33386, 33574, 33778,\\
+   & 33806, 33974, 34058, 34246, 34834, 34934 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[15001, 17500]$, $429$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$821$ Higgs-bounded candidates yield $m = 2k$ values; of these,
+$789$ have a verified non-3-Higgs prime witness in $2^m + 1$, and
+$32$ are partial-cofactor unknowns listed in the theorem; the primitive cases in this list are of the form $m=2p$. (The value $m = 30882$ was closed
+via Proposition~\ref{prop:Heven-structure}(3) from the closure of
+$m = 10294$; see Lemma~\ref{lem:closures-deep}.)
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-40000}
+$H_{\mathrm{even}} \cap (35000, 40000]$ is contained in the
+thirty-five-element candidate set
+\[
+\begin{aligned}
+\{ & 35038, 35194, 35366, 35654, 35678, 35818, 35858, 35878, 35942,\\
+   & 35978, 36094, 36122, 36298, 36458, 36574, 36602, 36682, 36794,\\
+   & 36986, 37234, 37322, 37358, 37382, 38174, 38282, 38518, 38954,\\
+   & 39014, 39062, 39154, 39502, 39706, 39826, 39926, 39958 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of $1250$ odd $k$ in $[17501, 20000]$, $419$ are not Higgs-bounded
+and excluded by Proposition~\ref{prop:Heven-structure}. The remaining
+$831$ Higgs-bounded candidates yield $m = 2k$ values; of these,
+$796$ have a verified non-3-Higgs prime witness in $2^m + 1$, and
+$35$ are partial-cofactor unknowns listed in the theorem; the primitive cases in this list are of the form $m=2p$.
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-45000}
+$H_{\mathrm{even}} \cap (40000, 45000]$ is contained in the
+thirty-three-element partial-cofactor candidate set
+\[
+\begin{aligned}
+\{ & 40234, 40466, 40538, 40574, 40822, 40886, 41126, 41326, 41386,\\
+   & 41714, 41758, 41878, 41898, 42134, 42314, 42358, 42646, 42766,\\
+   & 43058, 43154, 43322, 43402, 43574, 43634, 43642, 43678, 43786,\\
+   & 44054, 44186, 44294, 44378, 44518, 44582 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of the $1250$ odd $k$ in $[20001, 22500]$, $428$ are not
+Higgs-bounded and excluded by Proposition~\ref{prop:Heven-structure}.
+The remaining $822$ Higgs-bounded candidates yield $m = 2k$ values;
+of these, $789$ have a verified non-3-Higgs prime witness in
+$2^m + 1$ (after a second-pass FactorDB retry that recovered
+factor data for $26$ initially-no-factor cases), and $33$ are
+partial-cofactor unknowns listed in the theorem; the primitive cases in this list are of the form $m=2p$.
+\end{proof}
+
+\begin{theorem}\label{thm:Heven-50000}
+$H_{\mathrm{even}} \cap (45000, 50000]$ is contained in the
+thirty-eight-element partial-cofactor candidate set
+\[
+\begin{aligned}
+\{ & 45142, 45286, 45394, 45434, 45478, 45566, 45622, 45706, 45842,\\
+   & 46022, 46042, 46058, 46394, 46454, 46630, 46714, 46862, 47206,\\
+   & 47246, 47342, 47378, 47438, 47506, 47858, 47962, 47986, 48086,\\
+   & 48218, 48338, 48362, 48838, 49354, 49466, 49694, 49834, 49906,\\
+   & 49958, 49978 \}.
+\end{aligned}
+\]
+\end{theorem}
+
+\begin{proof}
+Of the $1250$ odd $k$ in $[22501, 25000]$, $430$ are not
+Higgs-bounded and excluded by Proposition~\ref{prop:Heven-structure}.
+The remaining $820$ Higgs-bounded candidates yield $m = 2k$ values;
+of these, $782$ have a verified non-3-Higgs prime witness in
+$2^m + 1$ (after a second-pass FactorDB retry that recovered
+factor data for $18$ initially-no-factor cases), and $38$ are
+partial-cofactor unknowns listed in the theorem; the primitive cases in this list are of the form $m=2p$.
+\end{proof}
+
+Without the seven closures of Lemma~\ref{lem:closures-deep}, the
+factor-cache verification alone gives
+\[
+|H_{\mathrm{even}} \cap [2, 50000]| \le 279,
+\]
+with the 10 verified elements through $m = 122$, no verified element
+in $(122, 50000]$, and at most $269$ undecided candidates beyond
+($198$ in $(1200, 40000]$, $33$ in $(40000, 45000]$ and $38$ in
+$(45000, 50000]$). The seven closures, all of whose witness primes are
+APR-CL verified (see the proof of Lemma~\ref{lem:closures-deep}), remove
+seven candidates in $(1200, 40000]$. They are already applied in
+Theorems~\ref{thm:Heven-3000}--\ref{thm:Heven-50000}, which together with
+Theorem~\ref{thm:Heven-1200} give
+\[
+|H_{\mathrm{even}} \cap [2, 50000]| \le 272
+\qquad
+\text{(see the note on primality below),}
+\]
+with $262$ undecided candidates remaining (the $71$ in $(40000, 50000]$
+admit no Pratt-tree closures in the current cache; their resolution
+requires further FactorDB data or local ECM at higher $B_1$).  The scripts test primality with a 12-base Miller--Rabin test; the large
+primes of Lemma~\ref{lem:closures-deep} are proved prime by APR-CL.
+
+\begin{lemma}[Deep-Pratt closures via large APR-CL-verified prime divisors]
+\label{lem:closures-deep}
+For each of the following six $m = 2p$ values, the indicated prime
+$p^{*} \mid 2^m + 1$ has a non-3-Higgs witness in $p^{*} - 1$,
+hence $p^{*} \notin \mathcal{P}_3$ and $m \notin H_{\mathrm{even}}$:
+\begin{center}
+\begin{tabular}{rrll}
+\toprule
+$m$ & $p^{*}$ digits & Non-3-Higgs witness $q$ & Reason \\
+\midrule
+$2446$  & $368$  & $q = 4513 \mid p^{*}-1$ & $v_2(4512) = 5 > 3$ \\
+$10294$ & $1549$ & $q = 2657 \mid p^{*}-1$ & $v_2(2656) = 5 > 3$ \\
+$10958$ & $1649$ & $q = 593 \mid p^{*}-1$ & $v_2(592) = 4 > 3$ \\
+$17398$ & $2612$ & $q = 139313 \mid p^{*}-1$ & $v_2(139312) = 4 > 3$ \\
+$19066$ & $2870$ & $q = 343081 \mid p^{*}-1$ & contains $17$ via $953$ \\
+$20282$ & $3053$ & $v_2(p^{*}-1) = 5071$ & direct $v_2$ overflow \\
+\bottomrule
+\end{tabular}
+\end{center}
+In addition, $m = 30882 = 6 \cdot 5147$ is closed by
+Proposition~\ref{prop:Heven-structure}(3) from the closure of
+$m = 10294 = 2 \cdot 5147$.
+\end{lemma}
+
+\begin{proof}
+For each row, the prime $p^{*}$ is recorded in the
+supplementary factor cache and verified to divide $2^m + 1$ by direct
+modular reduction. The primality of each $p^{*}$ is established by an
+APR-CL primality verification carried out in PARI/GP 2.17.3
+(\texttt{isprime(n, 2)}), and the subsequent exclusions use Pratt-tree
+descents~\cite{FKL,WimmerNoschinski}. PARI's \texttt{isprime(n, 2)}
+returns a Boolean rather than an independently checkable certificate
+object;
+the supplementary material therefore bundles the deterministic input
+files (the $p^{*}$ values in decimal) and the runtime logs ($3.4$,
+$79$, $88$, $615$, $679$, $958$ seconds wall-clock for rows
+$1$--$6$ on $11$-thread parallel execution), so readers can re-run
+\texttt{isprime(n, 2)} on the recorded version and reproduce the
+result. Conditional on the correctness of PARI/GP's APR-CL
+implementation, the primality of each $p^{*}$ is thereby established. For each row's witness $q$, trial division
+verifies $q \mid p^{*} - 1$, and the non-3-Higgs status of $q$ follows
+either from the explicit $v_2$ overflow (rows 1, 2, 3, 4, 6) or from a
+Pratt-tree descent terminating at $17$ (row 5: $343081 \succ 953
+\succ 17$, with $v_2(16) = 4 > 3$). Hence $p^{*}$ has a non-3-Higgs
+prime in its Pratt tree and $p^{*} \notin \mathcal{P}_3$; since
+$p^{*} \mid 2^m+1$, this gives $m \notin H_{\mathrm{even}}$. The
+final case $m = 30882$ follows from
+Proposition~\ref{prop:Heven-structure}(3): $10294 \mid 30882$, so
+$2^{10294}+1 \mid 2^{30882}+1$; any non-3-Higgs prime of $2^{10294}+1$
+(in particular the $1549$-digit $p^{*}$) is also a divisor of
+$2^{30882}+1$.
+\end{proof}
+
+\subsection{Ford's theorem and thinness}
+
+The structural lemma (Proposition~\ref{prop:Heven-structure}) confines
+$H_{\mathrm{even}}$ to the doubled image of a much more restrictive
+arithmetic object: the multiplicative semigroup
+\[
+\mathcal{S}_3^{(\le 3)}
+\;:=\;
+\left\{\, n \ge 1 \;:\;
+\begin{array}{l}
+\text{every prime factor of } n \text{ lies in } \mathcal{P}_3,\\
+\text{and each such prime has exponent at most } 3
+\end{array}
+\right\}.
+\]
+where $\mathcal{P}_3$ denotes the 3-Higgs primes (OEIS A057447). The
+defining recursive closure of $\mathcal{P}_3$,
+\[
+p \in \mathcal{P}_3 \implies \bigl(q \mid (p-1) \Rightarrow q \in \mathcal{P}_3\bigr),
+\]
+makes $\mathcal{P}_3$ a downward-closed set of primes in the sense of
+Ford~\cite{Ford2014}. Since the smallest omitted prime is $p_0 = 17$
+(as $17 - 1 = 2^4$ violates the $v_2 \le 3$ exponent bound), Ford's
+theorem applies unconditionally and yields
+\begin{equation}\label{eq:ford-bound}
+\Pi_3(X) := \#\{p \le X : p \in \mathcal{P}_3\}
+\;\ll\; \frac{X}{(\log X)^{1 + 1/(p_0 - 1)}}
+\;=\; \frac{X}{(\log X)^{17/16}},
+\end{equation}
+together with $\Pi_3(X) \ll X^{1-\delta}$ for some absolute
+$\delta > 0$, and the absolute convergence
+$\sum_{p \in \mathcal{P}_3} 1/p < \infty$.
+
+An entirely analogous argument applies to $H_{\mathrm{odd}} := H
+\setminus H_{\mathrm{even}}$ (the odd part of $H$). For $m$ odd in
+$H$ with $m > 3$, the Zsigmondy theorem yields a primitive prime
+divisor $r$ of $2^{2m}-1$ with $r \mid 2^m+1$; this $r$ has
+$\operatorname{ord}_r(2) = 2m$ and so $2m \mid r-1$, giving the
+same recursive constraint on the prime factors of $m$ themselves.
+The exceptional small values $m = 1$ ($2^1+1 = 3 \in \mathcal{P}_3$,
+$1$ is the empty product) and $m = 3$ ($2^3+1 = 9 = 3^2$, where the
+Zsigmondy exception $2^6 - 1$ removes the primitive-divisor step but
+$3 \in \mathcal{P}_3$ directly) are verified by hand. Thus
+$m \in \mathcal{S}_3^{(\le 3)}$ as well.
+
+\begin{theorem}\label{thm:H-thin}
+There exists an absolute constant $\eta > 0$ such that
+\[
+\#\{m \le X : m \in H\} \;\ll\; X^{1-\eta}.
+\]
+Moreover, $\displaystyle\sum_{m \in H} \frac{1}{m} < \infty$.
+The same bound holds for the subsets $H_{\mathrm{even}}$ and
+$H_{\mathrm{odd}}$.
+\end{theorem}
+
+\begin{proof}
+By the structural lemma (Proposition~\ref{prop:Heven-structure}) and
+its analog above, every $m \in H$ satisfies $m \in \mathcal{S}_3^{(\le 3)}$
+or $m/2 \in \mathcal{S}_3^{(\le 3)}$. So
+$\#\{m \le X : m \in H\} \le 2 \cdot \#\{k \le X : k \in
+\mathcal{S}_3^{(\le 3)}\}$.
+
+For $s \in (1-\delta, 1)$,
+\[
+\#\{n \le X : n \in \mathcal{S}_3^{(\le 3)}\}
+\;\le\; X^s \prod_{p \in \mathcal{P}_3} (1 + p^{-s} + p^{-2s} + p^{-3s})
+\]
+by Rankin's trick. The Euler product converges because $\sum_{p \in
+\mathcal{P}_3} p^{-s}$ converges for any $s > 1-\delta$ (by partial
+summation against (\ref{eq:ford-bound})). Hence
+$\#\{n \le X : n \in \mathcal{S}_3^{(\le 3)}\} \ll X^s$, and choosing
+$s = 1 - \eta$ for any $\eta < \delta$ gives the claim.
+
+The convergence of $\sum 1/m$ follows from
+$\sum_{n \in \mathcal{S}_3^{(\le 3)}} 1/n =
+\prod_{p \in \mathcal{P}_3}(1 + p^{-1} + p^{-2} + p^{-3}) < \infty$.
+\end{proof}
+
+\begin{corollary}[Power-saving counting and reciprocal mass for the exponent-capped family]\label{cor:A-bound}
+With $A(x) := \#(\mathcal{S}_3^{(\le 3)} \cap [1, x])$, there is an absolute
+constant $\eta > 0$ (the same $\eta$ as in
+Theorem~\ref{thm:H-thin}) such that
+\[
+A(x) \;\ll\; x^{1-\eta}
+\qquad \text{and} \qquad
+\sum_{n \in \mathcal{S}_3^{(\le 3)}} \frac{1}{n} < \infty.
+\]
+\end{corollary}
+
+\begin{proof}
+Both statements are the intermediate steps in the proof of
+Theorem~\ref{thm:H-thin}: the Rankin-trick application together with
+Ford's bound (\ref{eq:ford-bound}) and the Euler-product convergence.
+\end{proof}
+
+The corollary is qualitatively stronger than density zero: the set
+$H_{\mathrm{even}}$ has a power-saving thin support, and its
+reciprocals sum to a finite constant. The remaining gap between this
+unconditional result and Conjecture~\ref{conj:Heven-finite} is the
+last analytic step: showing that for every sufficiently large
+$k \in \mathcal{S}_3^{(\le 3)}$, some prime $r \mid 2^{2k}+1$ with
+$\operatorname{ord}_r(2) = 4k$ has $(r-1)/(4k) \notin \mathcal{S}_3^{(\le 3)}$.
+
+\subsection{Aurifeuillean structure of the open candidates}\label{sec:Aurifeuillean}
+
+Every primitive undecided candidate in
+Theorems~\ref{thm:Heven-3000}--\ref{thm:Heven-50000}
+has the form $m = 2p$ with $p$ an odd prime; composite undecided
+candidates are inherited from unresolved prime divisors. For $m=2p$,
+the classical Aurifeuillean
+identity~\cite{Wagstaff2002} gives an algebraic factorization
+\begin{equation}\label{eq:Aurifeuillean}
+2^{2p} + 1
+\;=\;
+\bigl(2^p - 2^{(p+1)/2} + 1\bigr)
+\bigl(2^p + 2^{(p+1)/2} + 1\bigr)
+\;=:\; L_p \cdot M_p.
+\end{equation}
+Each $L_p$ and $M_p$ has approximately half the bit-length of
+$2^{2p}+1$. Moreover, both sides are sparse polynomials of degree
+four in a power of $2$:
+\begin{itemize}
+\item For $p = 4u+1$, set $X = 2^u$, so $2^p = 2X^4$ and
+$2^{(p+1)/2} = 2X^2$. Then
+$L_p = 2X^4 - 2X^2 + 1, \quad M_p = 2X^4 + 2X^2 + 1$.
+\item For $p = 4u+3$, set $X = 2^u$, so $2^p = 8X^4$ and
+$2^{(p+1)/2} = 4X^2$. Then
+$L_p = 8X^4 - 4X^2 + 1, \quad M_p = 8X^4 + 4X^2 + 1$.
+\end{itemize}
+In both cases each half is an integer-coefficient quartic in $X$.
+This is the natural starting point for SNFS polynomial selection;
+In special-number field-sieve practice, polynomials of
+degree $5$ or $6$ (obtained by re-parameterization) may sieve
+more efficiently than the natural quartic for numbers in the
+$300$--$3000$-digit range relevant here. The Aurifeuillean halves are special-form targets rather than
+generic hard composites: each remaining prime-branch candidate gives
+an SNFS target with explicit small-degree algebraic structure.
+
+\paragraph{Worked example: $m = 2426$, $p = 1213$.}
+For $p = 1213 \equiv 1 \pmod 4$, write $1213 = 4 \cdot 303 + 1$ and
+set $x = 2^{303}$. Then
+\[
+2^{2426}+1 = (2x^4 - 2x^2 + 1)(2x^4 + 2x^2 + 1).
+\]
+Numerically, $L_{1213}$ and $M_{1213}$ are each $\approx 366$ decimal
+digits. The known prime factor $P = 25893760589$ divides $L_{1213}$
+exactly (not $M_{1213}$). A complete Pratt-tree descent~\cite{Ford2014}
+on $P$, namely
+\begin{align*}
+P-1 &= 2^2 \cdot 1213 \cdot 5336719 \\
+1213-1 &= 2^2 \cdot 3 \cdot 101, \qquad 101-1 = 2^2 \cdot 5^2 \\
+5336719-1 &= 2 \cdot 3 \cdot 889453, \qquad 889453-1 = 2^2 \cdot 3^2 \cdot 31 \cdot 797 \\
+797-1 &= 2^2 \cdot 199, \qquad 199-1 = 2 \cdot 3^2 \cdot 11, \qquad 11-1 = 2 \cdot 5,
+\end{align*}
+visits the distinct primes
+$\{2,3,5,11,31,101,199,797,1213,889453,5336719,P\}$ with maximal
+tree height $8$, and every exponent in every intermediate $q-1$ is at
+most $3$. So $P$ is \emph{fully} 3-Higgs-compatible; no shallow
+recursive obstruction exists. Closing $m = 2426$ therefore requires
+finding a non-3-Higgs prime in the residual composite
+$L_{1213} / (5 \cdot P)$ ($355$ digits) or in $M_{1213}$ ($366$
+digits) --- both special-form SNFS targets after the split.
+
+This example is independently confirmed by the official Cunningham
+Project tables~\cite{Wagstaff2002}: the January 2026 base-$2$ table
+lists
+\[
+2,\,2426\mathrm{L} \;=\; 5 \cdot 25893760589 \cdot \mathrm{C}355,
+\qquad
+2,\,2426\mathrm{M} \;=\; \mathrm{C}366,
+\]
+matching our decomposition exactly. The prime $25893760589$ is
+therefore a tabulated Cunningham factor of an as-yet-unfinished
+Aurifeuillean half, not an ad-hoc byproduct of our scripts.
+
+\medskip
+Under Hypothesis~H3, a proof of Conjecture~\ref{conj:Heven-finite}
+would leave only finitely many
+candidates in each even impostor class, for every $a$, after filter N; those
+would still have to be settled by other means, such as the search of
+Section~\ref{sec:search}.
+
+\subsection{The reduction to \texorpdfstring{$H_{\mathrm{even}}$}{H even}}
+
+Under Hypothesis~H3, the connection between $H_{\mathrm{even}}$ and the
+impostor branch of Section~\ref{sec:higgs} is sharp:
+
+\begin{proposition}\label{prop:Heven-reduction}
+Let $K$ be an impostor kernel of even seed parity (i.e., the impostor
+seed congruence has $a$ even). The set of $a$ in $K$'s seed congruence
+class that survive filter $N$ (no proper divisor or self has a
+non-3-Higgs prime in $2^m + 1$) is exactly
+\[
+\{a \in K\text{'s seed class} \cap H_{\mathrm{even}} :
+   \text{every proper } m \mid a \text{ with } a/m \text{ odd is in } H_{\mathrm{even}}\}.
+\]
+\end{proposition}
+
+\begin{proof}
+Filter $N$ tests each $m$ in $\{m : m \mid a, a/m \text{ odd}\}$,
+including $m = a$ itself, for the existence of a non-3-Higgs prime in
+$2^m + 1$. By definition of $H_{\mathrm{even}}$, no such non-3-Higgs
+prime exists iff every $m$ in this set lies in $H_{\mathrm{even}}$.
+\end{proof}
+
+\begin{corollary}[]\label{cor:finite-cascade}
+If Conjecture~\ref{conj:Heven-finite} holds, then for each of the four
+impostor kernels with even seed parity ($3^2\,5^3$, $5^2\,13^2$,
+$5^4\,157^2\,313$, and $5^4\,29\,157^2\,313$), only finitely many
+$a$ in the respective seed class survive filter $N$.
+\end{corollary}
+
+The fifth kernel $3^4\,41$ has odd seed parity ($a \equiv 9 \pmod{18}$);
+its filter $N$ runs over odd $m$ and reduces to the analogous odd-parity
+set $H_{\mathrm{odd}}$, for which an analogous finiteness conjecture
+applies.
+
+In particular, for the $3^2\,5^3$ kernel ($a \equiv 10 \pmod{20}$), the
+intersection $H_{\mathrm{even}} \cap \{a : a \equiv 10 \pmod{20}\}$
+consists, within the verified range, of exactly two elements:
+$\{10, 30\}$. Both are eliminated unconditionally by
+Proposition~\ref{prop:ten}. The other $248$ candidates in
+$\{a \equiv 10 \pmod{20}, a \le 5000\}$ are excluded by filter $N$
+or $Z$, under Hypothesis~H3.
+
+\section{Open problems}\label{sec:open}
+
+\begin{enumerate}[label=(\arabic*),leftmargin=*]
+\item \textbf{Larger $a$.}  The search is complete for each $a$ it closes, and
+its cost grows quickly with $a$; the obstruction is a prefix whose product is
+already very close to $2^{a+1}/(2^a+1)$ while two or more components remain
+unconstrained, so that the next component must be sought among all primes in a
+long interval.  \RESULTopen{}  A method for these tails that does not scan the
+interval, for example by fixing the exponents of the demanded primes first and
+solving for the last two components by divisor enumeration, would extend
+Theorem~\ref{thm:intro}.
+
+\item \textbf{Hypothesis H3.}  Prove or refute that every prime divisor of a
+unitary perfect number is 3-Higgs.  A proof would make
+Theorem~\ref{thm:conditional} unconditional and would connect the
+$H_{\mathrm{even}}$ problem of Section~\ref{sec:Heven} to unitary perfect
+numbers.
+
+\item \textbf{Finiteness of $H_{\mathrm{even}}$} (Conjecture~\ref{conj:Heven-finite}),
+or more modestly a proof that only finitely many primes $p$ have every prime
+factor of $2^{2p}+1$ in $\mathcal P_3$ (Theorem~\ref{thm:prime-reduction}).
+
+\item \textbf{Formal verification.}  The search uses only exact arithmetic and
+the lemmas of Section~\ref{sec:search}, so its correctness argument is short;
+a certified version (for example, a proof checker for its node log) would remove
+the need to trust the implementation.
+\end{enumerate}
+
+\section{Reproducibility}\label{sec:repro}
+
+The ancillary directory \texttt{anc/} contains:
+\begin{itemize}[leftmargin=*]
+\item \texttt{search/search2.py}: the search of Section~\ref{sec:search} in
+Python, with exact rational arithmetic (requires \texttt{sympy} and
+\texttt{numpy});
+\item \texttt{search/upn.c}: the same search in C with GMP, and
+\texttt{search/run\_all.py}, which factors $2^a+1$, runs the search for each
+$a$ of Theorem~\ref{thm:intro} and checks that no branch is open;
+\item \texttt{search/logs/}: the output of those runs, and of the kernel runs of
+Proposition~\ref{prop:ten};
+\item the material of version~2 for Sections~\ref{sec:higgs}
+and~\ref{sec:Heven}: the factor cache, the certificate and $H_{\mathrm{even}}$
+scripts, and the APR-CL transcripts.
+\end{itemize}
+For example, the case $a=12$ is checked by
+\begin{verbatim}
+cc -O2 -o upn anc/search/upn.c -lgmp -lm
+./upn 12 "17:1,241:1"
+\end{verbatim}
+whose last line reports the number of nodes, solutions and open branches.
+
+\section{Changes from version 2}\label{sec:changes}
+
+\begin{itemize}[leftmargin=*]
+\item Proposition~1 of version~2 (every prime divisor of a unitary perfect
+number is 3-Higgs) is withdrawn: its proof used the false divisibility
+$p-1\mid p^e+1$.  The statement is now Hypothesis~H3.  The elimination of the
+impostor kernels (version~2's Theorem~3 and Corollary~4) is stated under it
+(Theorem~\ref{thm:conditional}), with a one-line argument for three of the five
+kernels, and the source-kernel classification is no longer relied on.
+\item Filter O and its monotonicity lemma are withdrawn
+(Section~\ref{sec:higgs}).  The ten candidates it was used for are settled
+unconditionally (Proposition~\ref{prop:ten}).
+\item The exponent formula~\eqref{eq:exponent} is corrected: the seed term was
+missing.
+\item New: the exact search and Theorem~\ref{thm:intro}
+(Section~\ref{sec:search}).
+\item Section~\ref{sec:Heven}: the conjectural programme of version~2 is
+removed.  Its hybrid semigroup-friable conjecture is false: if $k$ is an odd
+prime in $\mathcal P_3$ and $r=4k+1$ is prime, then $\operatorname{ord}_r(2)=4k$
+and $(r-1)/(4k)=1$, and such $k$ are plentiful.  Its log-mass conjecture is
+false as stated, its estimate of the number of 3-Higgs primes up to $2^{44}$
+was wrong, and its explicit form of conditional finiteness was not proved.
+Smaller corrections: the largest witness has $115$ digits, not $85$; the
+factor used for $m=1202$ has $87$ digits; the primality tests used are stated;
+and the Cunningham table entry for $2,2426\mathrm L$ has the algebraic factor
+$5$.  In the ``Status at $\max_a=10000$'' discussion of version~2, the
+candidates $a=6759$ and $a=7338$ were described as closed by filter O; in the
+final certificate run they are closed by filter N, which is what
+Theorem~\ref{thm:conditional} uses.
+\end{itemize}
+
+\section*{Acknowledgments}
+
+I thank the maintainers of FactorDB~\cite{FactorDB}, whose data underpin
+filter N and Section~\ref{sec:Heven}.
+
+\begin{thebibliography}{99}
+
+\bibitem{SW1966}
+M.~V.~Subbarao and L.~J.~Warren,
+``Unitary perfect numbers,''
+\emph{Canad. Math. Bull.} \textbf{9} (1966), 147--153.
+
+\bibitem{Wall1975}
+C.~R.~Wall,
+``The fifth unitary perfect number,''
+\emph{Canad. Math. Bull.} \textbf{18} (1975), 115--122.
+
+\bibitem{Subbarao1970}
+M.~V.~Subbarao,
+``Are there an infinity of unitary perfect numbers?''
+\emph{Amer. Math. Monthly} \textbf{77} (1970), 389--390.
+
+\bibitem{Zsigmondy}
+K.~Zsigmondy,
+``Zur Theorie der Potenzreste,''
+\emph{Monatsh. Math. Phys.} \textbf{3} (1892), 265--284.
+
+\bibitem{SCNW1972}
+M.~V.~Subbarao, T.~J.~Cook, R.~S.~Newberry, and J.~M.~Weber,
+``On unitary perfect numbers,''
+\emph{Delta} \textbf{3} (1972), no.~1, 22--26.
+
+\bibitem{Wall1987}
+C.~R.~Wall,
+``On the largest odd component of a unitary perfect number,''
+\emph{Fibonacci Quart.} \textbf{25} (1987), 312--316.
+
+\bibitem{Wall1988}
+C.~R.~Wall,
+``New unitary perfect numbers have at least nine odd components,''
+\emph{Fibonacci Quart.} \textbf{26} (1988), no.~4, 312--317.
+
+\bibitem{Graham1989}
+S.~W.~Graham,
+``Unitary perfect numbers with squarefree odd part,''
+\emph{Fibonacci Quart.} \textbf{27} (1989), 317--322.
+
+\bibitem{Ford2014}
+K.~Ford,
+``Sieving very thin sets of primes, and Pratt trees with missing
+primes,''
+\emph{Int.~Math.~Res.~Not.~IMRN} \textbf{2014}, no.~11, 2955--2971.
+(arXiv:1212.3498)
+
+\bibitem{Wagstaff2002}
+S.~S.~Wagstaff, Jr.,
+\emph{The Cunningham Project},
+\url{https://homes.cerias.purdue.edu/~ssw/cun/} (last accessed 2026).
+See also Brillhart, Lehmer, Selfridge, Tuckerman, and Wagstaff,
+\emph{Factorizations of $b^n \pm 1$, $b=2,3,5,6,7,10,11,12$ up to high
+powers}, AMS, 3rd ed., 2002.
+
+\bibitem{OEIS}
+OEIS Foundation Inc.,
+``The On-Line Encyclopedia of Integer Sequences,''
+Sequence A002827 (unitary perfect numbers) and A057447 (3-Higgs primes),
+\url{https://oeis.org/}.
+
+\bibitem{FactorDB}
+FactorDB online factor database, \url{https://factordb.com/}.
+
+\bibitem{FKL}
+K.~Ford, S.~V.~Konyagin, and F.~Luca,
+``Prime chains and Pratt trees,''
+\emph{Geom. Funct. Anal.} \textbf{20} (2010), 1231--1258;
+arXiv:0904.0473.
+
+\bibitem{BurrisYeats}
+S.~Burris and K.~Yeats,
+``The saga of the high school identities,''
+\emph{Algebra Universalis} \textbf{52} (2005), 325--342.
+Introduces the recursive sequence $\Sigma_a$ of exponent-$a$ Higgs
+primes (motivational context for OEIS A057447); identifies $a > 1$
+as an open infinitude/density problem.
+
+\bibitem{WimmerNoschinski}
+S.~Wimmer and L.~Noschinski,
+``Pratt's primality certificates,''
+\emph{Archive of Formal Proofs} (2013),
+\url{https://www.isa-afp.org/entries/Pratt_Certificate.html}.
+
+\end{thebibliography}
+
+\end{document}
+
